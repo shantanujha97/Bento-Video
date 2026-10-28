@@ -1,0 +1,142 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>Bento demo v1</title>
+<style>
+@font-face{font-family:Friends;src:url(fonts/Friends-SemiBold.ttf);font-weight:600}
+@font-face{font-family:PJS;src:url(fonts/plus-jakarta-sans-latin-400-normal.woff2);font-weight:400}
+@font-face{font-family:PJS;src:url(fonts/plus-jakarta-sans-latin-500-normal.woff2);font-weight:500}
+@font-face{font-family:PJS;src:url(fonts/plus-jakarta-sans-latin-600-normal.woff2);font-weight:600}
+html,body{margin:0;background:#000;overflow:hidden}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;background:#040505;font-family:Friends,sans-serif;color:#fff}
+.abs{position:absolute;left:0;top:0}
+canvas{position:absolute;left:0;top:0}
+.world{position:absolute;left:0;top:0;width:1440px;transform-origin:0 0;backface-visibility:hidden}
+.world img{position:absolute;display:block}
+.card{position:absolute;left:0;top:0;width:1440px;overflow:hidden;border-radius:18px;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 1px 2px rgba(0,0,0,.35),0 4px 10px rgba(0,0,0,.22)}
+.glass{opacity:.5;position:absolute;left:-16px;top:-16px;width:1472px;border-radius:34px;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.14) 100%);backdrop-filter:blur(20px) saturate(1.15) brightness(1.15);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 0 0 1px rgba(255,255,255,.09),inset 0 0 18px rgba(255,255,255,.035),0 24px 60px rgba(0,0,0,.22)}
+.glass::before{content:"";position:absolute;inset:0;background:linear-gradient(112deg,rgba(255,255,255,0) 18%,rgba(255,255,255,.03) 26%,rgba(255,255,255,0) 36%)}
+.glass::after{content:"";position:absolute;inset:0;background:radial-gradient(110% 55% at 18% 0%,rgba(34,237,78,.05),rgba(0,0,0,0) 60%),radial-gradient(80% 45% at 88% 100%,rgba(254,75,21,.04),rgba(0,0,0,0) 62%)}
+.t{position:absolute;white-space:pre;font-family:PJS;font-weight:600}
+.caret{display:inline-block;width:2px;background:#fff;margin-left:2px;vertical-align:top}
+.sweep{position:absolute;overflow:hidden;display:none}
+.sweep i{position:absolute;top:-20%;height:140%;width:110px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.5),rgba(255,255,255,0));transform:skewX(-20deg)}
+.patch{position:absolute;background:#121212}
+.head{position:absolute;left:0;width:1920px;text-align:center;font-weight:600;letter-spacing:-0.025em;transform-origin:960px 50%}
+.head span{display:inline-block;margin:0 .13em}
+#flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,#fff 0%,#e6ffec 25%,#57ef80 55%,rgba(10,40,18,0) 100%);opacity:0}
+#black{position:absolute;inset:0;background:#000;opacity:0}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.chip{position:absolute;background:rgba(255,255,255,.86);color:#0a0b0e;font-family:PJS;font-weight:600;border-radius:6px;white-space:nowrap;backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(0,0,0,.35),inset 0 0 0 .5px rgba(255,255,255,.6)}
+.row,.bar{position:absolute}
+.pct{position:absolute;width:280.8px;text-align:right;font-family:PJS;font-weight:600;font-size:16px;line-height:17px;color:#22ed4e;white-space:pre}
+</style></head>
+<body>
+<div id="stage">
+  <canvas id="bg" width="1920" height="1080"></canvas>
+
+  <!-- A · Overview -->
+  <div id="wA" class="world" style="height:1300px">
+    <div class="glass" style="height:1332px"></div>
+    <div class="card" style="height:1300px">
+      <img src="assets/ov_base.jpg" style="left:0;top:0;width:1440px;height:1300px">
+      <div class="t" id="aBal1" style="left:277px;top:266px;font-size:28px;line-height:29px;color:#fff"></div>
+      <div class="t" id="aCap1" style="left:457.5px;top:266px;font-size:28px;line-height:29px;color:#b4b4b2"></div>
+      <div class="t" id="aBal2" style="left:860.5px;top:266px;font-size:28px;line-height:29px;color:#fff"></div>
+      <div class="t" id="aCap2" style="left:1041px;top:266px;font-size:28px;line-height:29px;color:#fff"></div>
+      <img id="chip" src="assets/chip.png" style="left:427.5px;top:409px;width:97px;height:32.5px;transform-origin:50% 50%">
+      <div class="sweep" id="shChip" style="left:427.5px;top:409px;width:97px;height:32.5px;border-radius:10px"><i></i></div>
+    </div>
+  </div>
+
+  <!-- B · Savings -->
+  <div id="wB" class="world" style="height:1250px">
+    <div class="glass" style="height:1282px"></div>
+    <div class="card" style="height:1250px">
+      <img src="assets/sav_base.jpg" style="left:0;top:0;width:1440px;height:1250px">
+      <img id="lines" src="assets/sav_lines.png" style="left:257px;top:477px;width:717px;height:206px">
+      <img id="tip" src="assets/tooltip.png" style="left:422px;top:474.3px;width:245px;height:183px;transform-origin:50% 0%">
+      <div class="t" id="bTot" style="left:665px;top:342px;font-size:32px;line-height:34px;color:#fff"></div>
+      <div class="t" id="bAmt" style="left:1012px;top:422px;font-size:26px;line-height:26px;color:#fff"></div>
+      <div class="t" id="bUsd" style="left:1012px;top:464px;font-size:14px;line-height:14px;color:#b4b4b2"></div>
+      <div class="t" id="bTo" style="left:1012px;top:564px;font-size:26px;line-height:26px;color:#fff"></div>
+      <div class="t" id="bUsd2" style="left:1012px;top:606px;font-size:14px;line-height:14px;color:#b4b4b2"></div>
+      <div class="patch" style="left:1268px;top:460px;width:126px;height:22px"></div>
+      <div class="t" id="bBal1" style="left:1094px;top:464px;width:296px;text-align:right;font-size:14px;line-height:14px;font-weight:400;color:#b4b4b2"></div>
+      <div class="patch" style="left:1268px;top:602px;width:124px;height:22px"></div>
+      <div class="t" id="bBal2" style="left:1092px;top:606px;width:296px;text-align:right;font-size:14px;line-height:14px;font-weight:400;color:#b4b4b2"></div>
+      <img id="depBtn" src="assets/dep_btn.png" style="left:984px;top:710px;width:432px;height:55px;transform-origin:50% 50%">
+      <div class="sweep" id="shDep" style="left:984px;top:710px;width:432px;height:55px;border-radius:0 0 24px 12px"><i></i></div>
+    </div>
+  </div>
+
+  <!-- C · Transparency -->
+  <div id="wC" class="world" style="height:1150px">
+    <div class="glass" style="height:1182px"></div>
+    <div class="card" style="height:1150px">
+      <img src="assets/tr_base.jpg" style="left:0;top:0;width:1440px;height:1150px">
+      <div class="t" id="cM" style="left:277px;top:387px;font-size:28px;line-height:29px;color:#fff"></div>
+      <img class="row" id="row0" src="assets/row0.png" style="left:257px;top:673px;width:1159px;height:64px">
+      <img class="row" id="row1" src="assets/row1.png" style="left:257px;top:741px;width:1159px;height:64px">
+      <img class="row" id="row2" src="assets/row2.png" style="left:257px;top:809px;width:1159px;height:64px">
+      <img class="row" id="row3" src="assets/row3.png" style="left:257px;top:877px;width:1159px;height:64px">
+      <img class="bar" id="bar0" src="assets/bar0.png" style="left:1010.5px;top:673px;width:405.5px;height:64px">
+      <img class="bar" id="bar1" src="assets/bar1.png" style="left:1068.1px;top:741px;width:347.9px;height:64px">
+      <img class="bar" id="bar2" src="assets/bar2.png" style="left:1126.3px;top:809px;width:289.7px;height:64px">
+      <img class="bar" id="bar3" src="assets/bar3.png" style="left:1300.1px;top:877px;width:115.9px;height:64px">
+      <div class="pct" id="pct0" style="left:1115.3px;top:696.5px"></div>
+      <div class="pct" id="pct1" style="left:1115.3px;top:764.5px"></div>
+      <div class="pct" id="pct2" style="left:1115.3px;top:832.5px"></div>
+      <div class="pct" id="pct3" style="left:1115.3px;top:900.5px"></div>
+    </div>
+  </div>
+
+  <!-- D · Wasabi Points + referral -->
+  <div id="wD" class="world" style="height:1100px">
+    <div class="glass" style="height:1132px"></div>
+    <div class="card" style="height:1100px">
+      <img src="assets/wa_base.jpg" style="left:0;top:0;width:1440px;height:1100px">
+      <div class="t" id="dPts" style="left:277px;top:375px;font-size:28px;line-height:29px;color:#fff"></div>
+      <div class="t" id="dPts24" style="left:450.5px;top:375px;font-size:28px;line-height:29px;color:#fff"></div>
+      <img id="invite" src="assets/invite.png" style="left:1314px;top:305px;width:86px;height:34px;transform-origin:50% 50%">
+      <div class="sweep" id="shInv" style="left:1314px;top:305px;width:86px;height:34px;border-radius:12px"><i></i></div>
+      <img id="refbg" src="assets/ref_bg.jpg" style="left:0;top:0;width:1440px;height:810px;opacity:0">
+      <div id="modal" class="abs" style="left:460.1px;top:104.5px;width:519.8px;height:601px;transform-origin:50% 50%">
+        <img src="assets/modal.png" style="left:0;top:0;width:519.8px;height:601px">
+        <div class="t" id="dName" style="left:242px;top:335px;font-size:16px;line-height:16px;color:#fff"></div>
+        <img id="createBtn" src="assets/create_btn.png" style="left:24px;top:437px;width:471.8px;height:38px;transform-origin:50% 50%">
+        <div class="sweep" id="shCreate" style="left:24px;top:437px;width:471.8px;height:38px;border-radius:12px"><i></i></div>
+      </div>
+      <div id="lc" class="abs" style="left:460.1px;top:229px;width:519.8px;height:352px;transform-origin:50% 50%;opacity:0">
+        <img src="assets/lc_modal.png" style="left:0;top:0;width:519.8px;height:352px">
+        <div class="t" id="dUrl" style="left:0;top:247px;width:519.8px;text-align:center;font-size:16px;line-height:16px;color:#fff">https://app.bento.com/ref/alex</div>
+        <div id="copied" class="abs" style="left:190px;top:297px;width:140px;height:24px;background:#22ed4e;opacity:0;overflow:hidden">
+          <div id="copiedTxt" class="t" style="left:0;top:4px;width:140px;text-align:center;font-size:16px;line-height:16px;color:#0f0f0f">✓ Copied</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- screen space -->
+  <div id="glow" class="abs" style="width:1000px;height:1000px;border-radius:50%;background:radial-gradient(circle,rgba(34,237,78,.30) 0%,rgba(59,105,255,.10) 38%,rgba(0,0,0,0) 70%);opacity:0"></div>
+  <svg id="logo" class="abs" width="1920" height="1080" viewBox="0 0 1920 1080" style="overflow:visible">
+    <defs><linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop id="g0" offset="0" stop-color="#fff" stop-opacity="0"/><stop id="g1" offset=".1" stop-color="#fff" stop-opacity=".75"/><stop id="g2" offset=".2" stop-color="#fff" stop-opacity="0"/></linearGradient></defs>
+    <g id="gMark"></g><g id="gLetters"></g>
+  </svg>
+  <div id="tag" class="head" style="font-family:PJS;font-weight:500;font-size:34px;letter-spacing:0;color:rgba(255,255,255,.62);opacity:0">Save smarter with Bento</div>
+  <div id="h1" class="head" style="top:482px;font-size:84px"></div>
+  <div id="card0" class="head" style="top:470px;font-size:104px"></div>
+  <div id="card1" class="head" style="top:470px;font-size:104px"></div>
+  <div id="card2" class="head" style="top:478px;font-size:92px"></div>
+  <div id="cursor" class="abs" style="width:1px;height:1px">
+    <svg id="curArrow" class="abs" width="34" height="42" viewBox="0 0 18 22" style="left:-4px;top:-3px"><path d="M2 1.5L2 18.5L6.5 14.2L9.6 21L12.6 19.7L9.6 13H16L2 1.5Z" fill="#fff" stroke="#0A0B0E" stroke-width="1.3" stroke-linejoin="round"/></svg>
+    <svg id="curHand" class="abs" width="34" height="40" viewBox="0 0 24 28" style="left:-12.4px;top:-2.6px;opacity:0"><path d="M8.8 2.2c-1.1 0-2 .9-2 2v9.4l-1.4-1.3c-.8-.8-2.1-.8-2.9 0s-.8 2.1 0 2.9l5.4 5.8c1.2 1.3 2.8 2 4.5 2h2.4c3.4 0 6.2-2.8 6.2-6.2v-4.6c0-1.1-.9-2-2-2-.4 0-.8.1-1.1.3-.2-.9-1-1.6-2-1.6-.5 0-1 .2-1.4.5-.3-.8-1-1.3-1.9-1.3-.4 0-.8.1-1.1.3V4.2c0-1.1-.9-2-2-2z" fill="#fff" stroke="#0A0B0E" stroke-width="1.25" stroke-linejoin="round"/><path d="M10.8 12.2v4.2M13.9 12.8v3.6M16.9 13.4v3" stroke="#0A0B0E" stroke-width="1.05" stroke-linecap="round"/></svg>
+  </div>
+  <div id="flash"></div>
+  <div id="vig"></div>
+  <div id="black"></div>
+</div>
+<script src="node_modules/gsap/dist/gsap.min.js"></script>
+<script src="node_modules/gsap/dist/CustomEase.min.js"></script>
+<script src="logo.js"></script>
+<script src="scene.js"></script>
+</body></html>
