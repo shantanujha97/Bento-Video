@@ -10,6 +10,7 @@ HTML/CSS + GSAP (paused timeline), rendered frame by frame with Playwright, enco
 | v3 | `index3.html` / `scene3.js` | Neutral product hovers, black dip instead of the green flash, motion-carrying transitions (slide, zoom-through, fly-in, vertical whip, rise, whip, glide), cinematic camera: 1.6 %/s drift, close-detail ↔ wide-reveal contrast, background parallax |
 
 | v4 | `index4.html` / `scene4.js` | One transition language (locked horizontal strip slide for every text ↔ UI cut), wide-then-overlapping-cut punch-ins that replay the action, jitter-free text, match-cut montage (Buy · Portfolio · Leaderboard · Referees) and the landing page scroll into the outro |
+| v5 | `index5.html` / `scene5.js` | v3's varied transitions back, each carried by the camera motion around it; momentum punch-in cuts (camera runs on video time while the action replays); forced zooms capped at 1.3×; framed montage shots with a continuous rightward glide, plus mobile and the landing page |
 
 Rendered videos are in `videos/`.
 
@@ -17,7 +18,7 @@ Re-render:
 
     npm install
     python3 -m http.server 8124 --bind 127.0.0.1 &
-    PAGE=index4.html node render.js video Bento_Demo_v4.mp4 60 0 44.13
+    PAGE=index5.html node render.js video Bento_Demo_v5.mp4 60 0 48.73
 
 Stills: `PAGE=index3.html node render.js stills 5.6,12.4,21.6 out/`
 Assets: `raw/` holds the 2.65× Figma renders; `tools/crops.py` cuts the layers into `assets/`.
