@@ -14,6 +14,7 @@ HTML/CSS + GSAP (paused timeline), rendered frame by frame with Playwright, enco
 | v6 | `index6.html` / `scene6.js` | Axial punch-in cuts (both shots zoom about the same point at the same screen position and rate), centred content-column close-ups at ~1.2×, one framing + one continuous push across the montage, landing stops after two sections and zooms through its logo into black (loops), no mobile, no glass plates, ~36 s (`scene6_long.js` is the 43 s version with the end card) |
 | v7 | `index7.html` / `scene7.js` | One camera move at a time (single-axis pans or pure push/pull about a fixed point), punch-ins as one push across the cut, no pops inside replay windows, no motion blur across cuts, montage dissolves, landing hero as the last shot fading to black (loops), 34 s |
 | v8 | `index8.html` / `scene8.js` | No punch-in cuts — continuous camera; every move is one kind only: push/pull about the frame centre or a pure horizontal/vertical pan (no diagonals), 34 s loop |
+| v9 | `index9.html` / `scene9.js` | At most two camera moves per screen, never back-and-forth: each screen lands wide and makes one slow push until the window fills the frame (Overview adds one pan left onto the Savings chip); the montage and landing carry the same push on; 34 s loop |
 
 Rendered videos are in `videos/`.
 
@@ -21,7 +22,7 @@ Re-render:
 
     npm install
     python3 -m http.server 8124 --bind 127.0.0.1 &
-    PAGE=index8.html node render.js video Bento_Demo_v8.mp4 60 0 34.29
+    PAGE=index9.html node render.js video Bento_Demo_v9.mp4 60 0 34.29
 
 Stills: `PAGE=index3.html node render.js stills 5.6,12.4,21.6 out/`
 Assets: `raw/` holds the 2.65× Figma renders; `tools/crops.py` cuts the layers into `assets/`.
