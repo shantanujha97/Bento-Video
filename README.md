@@ -17,6 +17,7 @@ HTML/CSS + GSAP (paused timeline), rendered frame by frame with Playwright, enco
 | v9 | `index9.html` / `scene9.js` | At most two camera moves per screen, never back-and-forth: each screen lands wide and makes one slow push until the window fills the frame (Overview adds one pan left onto the Savings chip); the montage and landing carry the same push on; 34 s loop |
 | v10 | `index10.html` / `scene10.js` | A signature move per screen instead of dollies everywhere: Overview lands close and glides right into a whip, Savings flies in close and glides right to the form, Transparency one building push-through, Wasabi lands close and pulls back; 33.6 s loop |
 | v11 | `index11.html` / `scene11.js` | From v9 with a creative-director pass: one idea per screen — Overview nearly locked wide (pan onto chip, push through), Savings as the hero (lands close on the complete chart, follows the cursor to the complete deposit form, whips down), Transparency one slow push, Wasabi a continuous lateral drift; quicker montage; direction carried across every edit; 33.8 s loop |
+| v12 | `index12.html` / `scene12.js` | Re-blocked camera (close-ups frame whole components, moves follow the cursor), live chart tooltip that tracks the cursor along the real curves, 15-screen montage (3 even, then accelerating) incl. pre-deposit pages, de-duplicated data and token icons (`tools/dedupe.py`); 36.7 s loop |
 
 Rendered videos are in `videos/`.
 
@@ -24,7 +25,7 @@ Re-render:
 
     npm install
     python3 -m http.server 8124 --bind 127.0.0.1 &
-    PAGE=index11.html node render.js video Bento_Demo_v11.mp4 60 0 33.84
+    PAGE=index12.html node render.js video Bento_Demo_v12.mp4 60 0 36.65
 
 Stills: `PAGE=index3.html node render.js stills 5.6,12.4,21.6 out/`
 Assets: `raw/` holds the 2.65× Figma renders; `tools/crops.py` cuts the layers into `assets/`.
