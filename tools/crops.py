@@ -79,3 +79,6 @@ _im = load('wa_base'); _W = round(240 * S)
 _top = _im.crop((0, 0, _W, round(515 * S))); _bot = _im.crop((0, round(802 * S), _W, round(1100 * S)))
 _side = Image.new('RGBA', (_W, round(810 * S))); _side.paste(_top, (0, 0)); _side.paste(_bot, (0, round(515 * S)))
 _side.convert('RGB').save(f'{A}/wa_side.jpg', quality=93)
+
+# v10: Overview "Earn" button (bentoUSD+ card) — pressed at the end of the glide
+crop('ov_base', 'earn_btn', 1310, 290, 88, 34, (12, 12, 12, 12))
