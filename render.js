@@ -6,7 +6,7 @@ const fs = require('fs');
 
 (async () => {
   const [mode, a1, a2, a3, a4] = process.argv.slice(2);
-  const browser = await chromium.launch({ args: ['--disable-web-security', '--force-color-profile=srgb'] });
+  const browser = await chromium.launch({ args: ['--disable-web-security', '--force-color-profile=srgb', '--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('console', m => { if (m.type() === 'error') console.error('PAGE:', m.text()); });
   page.on('pageerror', e => console.error('PAGEERR:', e.message));
