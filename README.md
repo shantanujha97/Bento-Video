@@ -21,6 +21,7 @@ HTML/CSS + GSAP (paused timeline), rendered frame by frame with Playwright, enco
 | v13 | `index13.html` / `scene13.js` | v9 camera centred + v12 tooltip, data, montage (locked at full) |
 | v14 | `index14.html` / `scene14.js` | Reveal blocking (close → travel → pull back) — not rendered |
 | v15 | `index15.html` / `scene15.js` | Every screen centred with the whole window + background visible: land at 0.72, one gentle centred push to 0.86, no pans; montage + landing locked at 0.86; 37.1 s loop |
+| v16 | `index16.html` / `scene16.js` | After the Commas reference: screens locked off, centred at 0.8 with background, no dolly; the camera only follows action (snaps in on the deposit form while typing, snaps back out); 37.1 s loop |
 
 Rendered videos are in `videos/`.
 
@@ -28,7 +29,7 @@ Re-render:
 
     npm install
     python3 -m http.server 8124 --bind 127.0.0.1 &
-    PAGE=index15.html node render.js video Bento_Demo_v15.mp4 60 0 37.09
+    PAGE=index16.html node render.js video Bento_Demo_v16.mp4 60 0 37.09
 
 Stills: `PAGE=index3.html node render.js stills 5.6,12.4,21.6 out/`
 Assets: `raw/` holds the 2.65× Figma renders; `tools/crops.py` cuts the layers into `assets/`.
