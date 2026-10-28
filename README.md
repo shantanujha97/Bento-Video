@@ -12,6 +12,7 @@ HTML/CSS + GSAP (paused timeline), rendered frame by frame with Playwright, enco
 | v4 | `index4.html` / `scene4.js` | One transition language (locked horizontal strip slide for every text ↔ UI cut), wide-then-overlapping-cut punch-ins that replay the action, jitter-free text, match-cut montage (Buy · Portfolio · Leaderboard · Referees) and the landing page scroll into the outro |
 | v5 | `index5.html` / `scene5.js` | v3's varied transitions back, each carried by the camera motion around it; momentum punch-in cuts (camera runs on video time while the action replays); forced zooms capped at 1.3×; framed montage shots with a continuous rightward glide, plus mobile and the landing page |
 | v6 | `index6.html` / `scene6.js` | Axial punch-in cuts (both shots zoom about the same point at the same screen position and rate), centred content-column close-ups at ~1.2×, one framing + one continuous push across the montage, landing stops after two sections and zooms through its logo into black (loops), no mobile, no glass plates, ~36 s (`scene6_long.js` is the 43 s version with the end card) |
+| v7 | `index7.html` / `scene7.js` | One camera move at a time (single-axis pans or pure push/pull about a fixed point), punch-ins as one push across the cut, no pops inside replay windows, no motion blur across cuts, montage dissolves, landing hero as the last shot fading to black (loops), 34 s |
 
 Rendered videos are in `videos/`.
 
@@ -19,7 +20,7 @@ Re-render:
 
     npm install
     python3 -m http.server 8124 --bind 127.0.0.1 &
-    PAGE=index6.html node render.js video Bento_Demo_v6.mp4 60 0 35.733
+    PAGE=index7.html node render.js video Bento_Demo_v7.mp4 60 0 34.25
 
 Stills: `PAGE=index3.html node render.js stills 5.6,12.4,21.6 out/`
 Assets: `raw/` holds the 2.65× Figma renders; `tools/crops.py` cuts the layers into `assets/`.
