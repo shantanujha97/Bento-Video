@@ -26,11 +26,19 @@ HTML/CSS + GSAP (paused timeline), rendered frame by frame with Playwright, enco
 
 Rendered videos are in `videos/` (v17 is the web-encoded copy).
 
-Re-render:
+## Render (Mac)
 
-    npm install
-    python3 -m http.server 8124 --bind 127.0.0.1 &
-    PAGE=index17.html node render.js video Bento_Demo_v17.mp4 60 0 37.09
+Needs Node 18+, Python 3 and ffmpeg (`brew install node ffmpeg`).
+
+```bash
+git clone https://github.com/shantanujha97/Bento-Video && cd Bento-Video
+npm install                      # gsap, sharp, playwright
+npx playwright install chromium
+npm run serve &                  # static server on 127.0.0.1:8124
+npm run render                   # → Bento_Demo_v17.mp4 (1920×1080, 60 fps, 37.1 s)
+```
+
+Any version: `PAGE=indexN.html node render.js video out.mp4 60 0 <duration>`. To render faster, split the range across terminals (`… 60 0 9.3`, `… 60 9.3 18.6`, …) and join with `ffmpeg -f concat -safe 0 -i list.txt -c copy out.mp4`.
 
 Rebuild the background bundle: `cd rb && npm i react@18.3.1 react-dom@18.3.1 esbuild@0.23.1 && npx esbuild src/entry.jsx --bundle --minify --jsx=automatic --loader:.jsx=jsx --loader:.css=css --outfile=../assets/rb.js --define:process.env.NODE_ENV=\"production\"`
 
